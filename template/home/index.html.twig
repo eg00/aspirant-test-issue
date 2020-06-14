@@ -3,6 +3,13 @@
 {% block title %}{{ trailers | length }} iTunes Movie trailers{% endblock %}
 
 {% block content %}
+    <div class="ml-2 position-relative">
+        <div class="position-absolute border p-3">
+            <p>Time and date: {{  date | date("H:i:s m/d/Y") }}</p>
+            <p>Class: {{ class }}</p>
+            <p>Method: {{ method }}</p>
+        </div>
+    </div>
     <div class="container">
         <h1 class="mt-5 mb-4">{{ trailers | length }} iTunes Movie trailers</h1>
         <table class="table table-bordered">

@@ -58,9 +58,13 @@ class HomeController
      */
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $class = new \ReflectionClass($this);
         try {
             $data = $this->twig->render('home/index.html.twig', [
                 'trailers' => $this->fetchData(),
+                'class' => $class->getShortName(),
+                'method' => $class->getMethod(__FUNCTION__)->name,
+                'date' => (new \DateTime())
             ]);
         } catch (\Exception $e) {
             throw new HttpBadRequestException($request, $e->getMessage(), $e);
