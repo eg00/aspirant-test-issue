@@ -94,6 +94,10 @@ class FetchDataCommand extends Command
             throw new RuntimeException('Source must be string');
         }
         $io = new SymfonyStyle($input, $output);
+
+        $io->title(sprintf('Remove old data'));
+        $this->removeAll();
+
         $io->title(sprintf('Fetch data from %s', $source));
 
         try {
@@ -126,7 +130,10 @@ class FetchDataCommand extends Command
         if (!property_exists($xml, 'channel')) {
             throw new RuntimeException('Could not find \'channel\' element in feed');
         }
-        foreach ($xml->channel->item as $item) {
+        foreach ($xml->xpath("//channel/item") as $i => $item)  {
+            if ($i > 9) {
+                break;
+            }
             $trailer = $this->getMovie((string) $item->title)
                 ->setTitle((string) $item->title)
                 ->setDescription((string) $item->description)
@@ -173,5 +180,13 @@ class FetchDataCommand extends Command
         }
 
         return $item;
+    }
+
+    private function removeAll()
+    {
+        foreach ($this->doctrine->getRepository(Movie::class)->findAll() as $entity) {
+            $this->doctrine->remove($entity);
+        }
+        $this->doctrine->flush();
     }
 }
