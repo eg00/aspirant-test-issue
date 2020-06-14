@@ -139,7 +139,7 @@ class FetchDataCommand extends Command
                 ->setDescription((string) $item->description)
                 ->setLink((string) $item->link)
                 ->setPubDate($this->parseDate((string) $item->pubDate))
-            ;
+                ->setImage($this->getSrc($item));
 
             $this->doctrine->persist($trailer);
         }
@@ -188,5 +188,20 @@ class FetchDataCommand extends Command
             $this->doctrine->remove($entity);
         }
         $this->doctrine->flush();
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    private function getSrc($data): string
+    {
+        $content = $data->children('content',true);
+        $html = (string) $content->encoded;
+
+        $doc = new \DOMDocument();
+        @$doc->loadHTML($html);
+        $xpath = new \DOMXPath($doc);
+        return $xpath->evaluate("string(//img/@src)");
     }
 }

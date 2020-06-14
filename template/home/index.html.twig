@@ -5,7 +5,7 @@
 {% block content %}
     <div class="ml-2 position-relative">
         <div class="position-absolute border p-3">
-            <p>Time and date: {{  date | date("H:i:s m/d/Y") }}</p>
+            <p>Time and date: {{ date | date("H:i:s m/d/Y") }}</p>
             <p>Class: {{ class }}</p>
             <p>Method: {{ method }}</p>
         </div>
@@ -15,7 +15,14 @@
         <table class="table table-bordered">
             {% for trailer in trailers %}
                 <tr>
-                    <td>{{ trailer.title }}</td>
+                    <td>
+                        <div class="media align-items-center">
+                            <img class="mr-3" src="{{ trailer.image }}" alt="{{ trailer.title }}">
+                            <div class="media-body">
+                                <h5>{{ trailer.title }}</h5>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
