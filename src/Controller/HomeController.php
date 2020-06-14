@@ -76,6 +76,26 @@ class HomeController
     }
 
     /**
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     *
+     * @return ResponseInterface
+     */
+    public function show(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+
+        $id = (int) $request->getAttribute('id');
+        $data = $this->twig->render('home/show.html.twig', [
+            'trailer' => $this->findMovie($id),
+        ]);
+
+        $response->getBody()->write($data);
+
+        return $response;
+    }
+
+    /**
      * @return Collection
      */
     protected function fetchData(): Collection
@@ -84,5 +104,15 @@ class HomeController
             ->findAll();
 
         return new ArrayCollection($data);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return object
+     */
+    protected function findMovie(int $id): object
+    {
+        return $this->em->getRepository(Movie::class)->find($id);
     }
 }

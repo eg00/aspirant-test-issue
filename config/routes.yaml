@@ -4,3 +4,10 @@ main:
   controller: App\Controller\HomeController
   action: index
 
+show:
+  method: 'get'
+  path: show/{id}
+  requirements:
+    id: '\d+'
+  controller: App\Controller\HomeController
+  action: show
